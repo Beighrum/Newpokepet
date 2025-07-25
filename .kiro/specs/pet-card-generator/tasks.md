@@ -1,0 +1,201 @@
+# Implementation Plan
+
+- [x] 1. Set up project structure and development environment
+  - Create React TypeScript project with Vite
+  - Configure Tailwind CSS and essential dependencies
+  - Set up Firebase project and configuration files
+  - Initialize Node.js serverless functions structure
+  - Configure development environment with hot reload
+  - Set up n8n Cloud account and initial workflow templates
+  - _Requirements: All requirements need proper project foundation_
+  - _Story Points: 5pts_
+  - _Persona: All_
+
+- [x] 2. Create landing page and onboarding experience
+  - Build responsive landing page hero section with value proposition
+  - Create feature highlight carousel with sample pet cards
+  - Add call-to-action buttons for signup and demo
+  - Implement responsive design for mobile and desktop
+  - Add loading animations and micro-interactions
+  - _Requirements: New Visitor persona needs to discover value quickly_
+  - _Story Points: 8pts_
+  - _Persona: New Visitor_
+
+- [ ] 3. Implement core authentication system
+  - Set up Firebase Auth configuration in React app
+  - Create login/signup modal components with email authentication
+  - Add Google and Facebook OAuth integration
+  - Implement protected route wrapper component
+  - Add user context provider for global auth state
+  - Create user profile management interface
+  - Write unit tests for authentication components
+  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
+  - _Story Points: 13pts (8pts email + 5pts social auth)_
+  - _Persona: New Visitor, Casual User_
+
+- [ ] 4. Build photo upload and validation system
+  - Create file upload component with drag-and-drop support
+  - Implement client-side image validation (format, size, dimensions)
+  - Add image preview and cropping functionality
+  - Create upload progress indicator with cancellation
+  - Implement error handling for invalid uploads
+  - Write unit tests for upload validation logic
+  - _Requirements: 1.1, 1.2, 1.4, 1.5_
+  - _Story Points: 5pts_
+  - _Persona: Casual User_
+
+- [ ] 5. Set up backend API foundation
+  - Create Express server with TypeScript configuration
+  - Set up Firebase Admin SDK for server-side auth
+  - Implement middleware for authentication verification
+  - Create file upload endpoint with Multer
+  - Add request validation and error handling middleware
+  - Configure CORS and security headers
+  - Write integration tests for API endpoints
+  - _Requirements: 4.1, 4.2, 4.3, 8.1, 8.2, 8.3_
+  - _Story Points: 8pts_
+  - _Persona: All_
+
+- [ ] 6. Implement rarity assignment system
+  - Create rarity distribution algorithm with weighted randomization
+  - Build rarity badge components with visual styling
+  - Implement rarity calculation service with proper distribution (40% common, 25% uncommon, 20% rare, 10% epic, 4% legendary, 1% secret rare)
+  - Add rarity celebration animations for rare cards
+  - Create unit tests for rarity distribution accuracy
+  - _Requirements: 2.1, 2.2, 2.3, 2.5_
+  - _Story Points: 5pts_
+  - _Persona: Collector_
+
+- [ ] 7. Build AI image generation integration
+  - Set up API integration with Replicate API
+  - Create image generation service with retry logic
+  - Implement prompt engineering for pet card styles
+  - Trigger n8n workflow via API for image generation
+  - Add generation progress tracking and status updates
+  - Create fallback mechanisms for API failures
+  - Write integration tests with mocked AI responses
+  - _Requirements: 1.1, 1.2, 1.3, 8.2, 8.3_
+  - _Story Points: 8pts_
+  - _Persona: Casual User, Collector_
+
+- [ ] 8. Implement basic GIF animation system
+  - Set up FFMpeg integration for server-side processing
+  - Create animation service to generate 3-5 frame GIFs
+  - Implement file size optimization (under 2MB target)
+  - Add boomerang effect fallback for failed animations
+  - Create animation preview component in frontend
+  - Write unit tests for animation generation logic
+  - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
+  - _Story Points: 8pts_
+  - _Persona: Casual User, Collector_
+
+- [ ] 9. Build card data models and storage
+  - Define Firestore data schema for users and cards
+  - Create card model with TypeScript interfaces
+  - Implement CRUD operations for card persistence
+  - Set up Cloud Storage for image and animation files
+  - Add metadata tracking (generation time, file sizes, etc.)
+  - Write unit tests for data model validation
+  - _Requirements: 4.2, 4.3, 4.4_
+  - _Story Points: 5pts_
+  - _Persona: Collector_
+
+- [ ] 10. Create card display and interaction components
+  - Build card component with animation toggle
+  - Implement card detail view with metadata display
+  - Add sharing functionality (download, social media)
+  - Create card grid layout for collections
+  - Add loading states and error boundaries
+  - Write component tests with React Testing Library
+  - _Requirements: 5.2, 5.3, 2.2, 3.3_
+  - _Story Points: 8pts_
+  - _Persona: Casual User, Collector_
+
+- [ ] 11. Implement gallery and collection management
+  - Create gallery page with responsive grid layout
+  - Add search and filter functionality by rarity and date
+  - Implement pagination for large collections
+  - Build card selection and bulk operations
+  - Add collection statistics and rarity breakdown
+  - Create delete confirmation dialogs
+  - Write integration tests for gallery operations
+  - _Requirements: 5.1, 5.2, 5.4, 5.5, 2.4_
+  - _Story Points: 5pts_
+  - _Persona: Collector_
+
+- [ ] 12. Build premium user features foundation
+  - Create subscription tier detection and UI components
+  - Implement premium feature gates and upgrade prompts
+  - Add premium badge indicators throughout the app
+  - Create billing integration preparation (Stripe setup)
+  - Build premium onboarding flow
+  - Write tests for premium feature access control
+  - _Requirements: 6.4, 7.4_
+  - _Story Points: 8pts_
+  - _Persona: Premium Member_
+
+- [ ] 13. Implement card evolution system
+  - Create evolution UI with stage progression indicators
+  - Build evolution service with enhanced AI generation
+  - Implement evolution history tracking and display
+  - Add evolution confirmation and preview system
+  - Create premium-only evolution restrictions
+  - Write unit tests for evolution logic and state management
+  - _Requirements: 6.1, 6.2, 6.3, 6.5_
+  - _Story Points: 8pts_
+  - _Persona: Premium Member, Collector_
+
+- [ ] 14. Add premium video generation
+  - Integrate RunwayML API for high-quality video creation
+  - Create video generation service with queue management
+  - Implement video preview and download functionality
+  - Add video resolution options and quality settings
+  - Create fallback to enhanced GIF for video failures
+  - Write integration tests for video generation pipeline
+  - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
+  - _Story Points: 8pts_
+  - _Persona: Premium Member_
+
+- [ ] 15. Implement performance optimizations
+  - Add image compression and optimization pipeline
+  - Implement caching strategy for generated content
+  - Create loading states and skeleton screens
+  - Add lazy loading for gallery images
+  - Optimize bundle size and implement code splitting
+  - Add performance monitoring and metrics collection
+  - _Requirements: 8.1, 8.4, 8.5_
+  - _Story Points: 5pts_
+  - _Persona: All_
+
+- [ ] 16. Build comprehensive error handling
+  - Create global error boundary for React components
+  - Implement toast notification system for user feedback
+  - Add retry mechanisms with exponential backoff
+  - Create error logging and monitoring integration
+  - Build graceful degradation for offline scenarios
+  - Write error handling tests and failure scenarios
+  - _Requirements: 8.1, 8.2, 8.3, 8.5_
+  - _Story Points: 5pts_
+  - _Persona: All_
+
+- [ ] 17. Add end-to-end testing and deployment
+  - Set up Playwright for E2E testing of critical user journeys
+  - Create test scenarios for complete card generation flow
+  - Implement CI/CD pipeline with automated testing
+  - Configure production deployment with environment variables
+  - Add monitoring and alerting for production issues
+  - Create deployment rollback procedures
+  - _Requirements: All requirements need E2E validation_
+  - _Story Points: 8pts_
+  - _Persona: All_
+
+- [ ] 18. Implement analytics and monitoring
+  - Add user analytics tracking for key metrics (activation, retention, task completion)
+  - Create dashboard for monitoring card generation success rates
+  - Implement cost tracking for AI API usage
+  - Add performance monitoring for loading times
+  - Create alerts for system errors and high API costs
+  - Build admin interface for system health monitoring
+  - _Requirements: All requirements need monitoring for success metrics_
+  - _Story Points: 5pts_
+  - _Persona: All_
