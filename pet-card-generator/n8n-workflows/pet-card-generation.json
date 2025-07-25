@@ -1,0 +1,154 @@
+{
+  "name": "Pet Card Generation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-card",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate input and extract image data\nconst body = $input.first().json.body;\n\nif (!body.imageData || !body.userId) {\n  throw new Error('Missing required fields: imageData and userId');\n}\n\nreturn {\n  imageData: body.imageData,\n  userId: body.userId,\n  style: body.style || 'realistic',\n  variants: body.variants || 4\n};"
+      },
+      "id": "validate-input",
+      "name": "Validate Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.replicate.com/v1/predictions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "replicateApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "version",
+              "value": "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b"
+            },
+            {
+              "name": "input",
+              "value": "={{ { \"image\": $json.imageData, \"prompt\": \"a \" + $json.style + \" style trading card of a pet, high quality, detailed\" } }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "replicate-api",
+      "name": "Replicate API Call",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Assign rarity based on weighted distribution\nconst rarities = [\n  { name: 'common', weight: 40 },\n  { name: 'uncommon', weight: 25 },\n  { name: 'rare', weight: 20 },\n  { name: 'epic', weight: 10 },\n  { name: 'legendary', weight: 4 },\n  { name: 'secret_rare', weight: 1 }\n];\n\nconst random = Math.random() * 100;\nlet cumulative = 0;\nlet assignedRarity = 'common';\n\nfor (const rarity of rarities) {\n  cumulative += rarity.weight;\n  if (random <= cumulative) {\n    assignedRarity = rarity.name;\n    break;\n  }\n}\n\nreturn {\n  ...($input.first().json),\n  rarity: assignedRarity,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "assign-rarity",
+      "name": "Assign Rarity",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Simulate GIF animation creation\n// In real implementation, this would call FFMpeg service\nconst cardData = $input.first().json;\n\nreturn {\n  ...cardData,\n  animatedGifUrl: `https://storage.googleapis.com/pet-cards/animations/${cardData.userId}_${Date.now()}.gif`,\n  processingComplete: true\n};"
+      },
+      "id": "create-animation",
+      "name": "Create GIF Animation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  \"success\": true,\n  \"card\": {\n    \"id\": $json.userId + \"_\" + Date.now(),\n    \"userId\": $json.userId,\n    \"generatedImageUrl\": $json.output?.[0] || \"https://placeholder.com/512x512\",\n    \"animatedGifUrl\": $json.animatedGifUrl,\n    \"rarity\": $json.rarity,\n    \"style\": $json.style,\n    \"createdAt\": $json.timestamp\n  }\n} }}"
+      },
+      "id": "webhook-response",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1340, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Validate Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Input": {
+      "main": [
+        [
+          {
+            "node": "Replicate API Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate API Call": {
+      "main": [
+        [
+          {
+            "node": "Assign Rarity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Rarity": {
+      "main": [
+        [
+          {
+            "node": "Create GIF Animation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create GIF Animation": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "1"
+}

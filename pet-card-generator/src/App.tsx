@@ -4,11 +4,13 @@ import { initializeSentry } from './config/sentry'
 import { securityEventIntegration } from './services/securityEventIntegration'
 import SecurityErrorBoundary from './components/SecurityErrorBoundary'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './hooks/useAuth'
 import Navbar from './components/Navbar'
 import LandingPage from './pages/LandingPage'
 import UploadPage from './pages/UploadPage'
 import EvolutionPage from './pages/EvolutionPage'
 import ProfilePage from './pages/ProfilePage'
+import ProtectedRoute from './components/auth/ProtectedRoute'
 // Initialize Firebase
 import './config/firebase'
 
@@ -38,19 +40,42 @@ function App() {
 
   return (
     <SecurityErrorBoundary>
-      <Router>
-        <div className="App min-h-screen bg-gray-50">
-          <Navbar />
-          <main>
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/upload" element={<UploadPage />} />
-              <Route path="/evolution" element={<EvolutionPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-            </Routes>
-          </main>
-        </div>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <div className="App min-h-screen bg-gray-50">
+            <Navbar />
+            <main>
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route 
+                  path="/upload" 
+                  element={
+                    <ProtectedRoute>
+                      <UploadPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/evolution" 
+                  element={
+                    <ProtectedRoute>
+                      <EvolutionPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/profile" 
+                  element={
+                    <ProtectedRoute>
+                      <ProfilePage />
+                    </ProtectedRoute>
+                  } 
+                />
+              </Routes>
+            </main>
+          </div>
+        </Router>
+      </AuthProvider>
     </SecurityErrorBoundary>
   )
 }

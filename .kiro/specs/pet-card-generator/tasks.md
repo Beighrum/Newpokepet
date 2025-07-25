@@ -21,7 +21,7 @@
   - _Story Points: 8pts_
   - _Persona: New Visitor_
 
-- [ ] 3. Implement core authentication system
+- [-] 3. Implement core authentication system
   - Set up Firebase Auth configuration in React app
   - Create login/signup modal components with email authentication
   - Add Google and Facebook OAuth integration

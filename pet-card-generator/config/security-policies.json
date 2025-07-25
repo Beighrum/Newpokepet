@@ -1,0 +1,131 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-01T00:00:00.000Z",
+  "policies": {
+    "userProfiles": {
+      "allowedTags": [
+        "b", "i", "em", "strong", "u", "s", "br", "p", "span"
+      ],
+      "allowedAttributes": {
+        "span": ["class"],
+        "p": ["class"]
+      },
+      "allowedSchemes": ["http", "https"],
+      "allowedSchemesByTag": {},
+      "stripIgnoreTag": true,
+      "stripIgnoreTagBody": ["script", "style"],
+      "keepContent": true,
+      "forbidTags": [
+        "script", "object", "embed", "link", "style", "img", "video", "audio",
+        "iframe", "frame", "frameset", "applet", "base", "meta", "title"
+      ],
+      "forbidAttr": [
+        "onclick", "onload", "onerror", "onmouseover", "onmouseout", "onfocus",
+        "onblur", "onchange", "onsubmit", "onreset", "onselect", "onkeydown",
+        "onkeypress", "onkeyup", "style", "background", "src", "href"
+      ]
+    },
+    "petCardMetadata": {
+      "allowedTags": [
+        "b", "i", "em", "strong", "u", "br", "span"
+      ],
+      "allowedAttributes": {
+        "span": ["class"]
+      },
+      "allowedSchemes": [],
+      "allowedSchemesByTag": {},
+      "stripIgnoreTag": true,
+      "stripIgnoreTagBody": ["script", "style"],
+      "keepContent": true,
+      "forbidTags": [
+        "script", "object", "embed", "link", "style", "img", "video", "audio",
+        "iframe", "frame", "frameset", "applet", "base", "meta", "title", "p", "div"
+      ],
+      "forbidAttr": [
+        "onclick", "onload", "onerror", "onmouseover", "onmouseout", "onfocus",
+        "onblur", "onchange", "onsubmit", "onreset", "onselect", "onkeydown",
+        "onkeypress", "onkeyup", "style", "background", "src", "href", "id"
+      ]
+    },
+    "comments": {
+      "allowedTags": [
+        "b", "i", "em", "strong", "u", "s", "br", "p", "span", "blockquote"
+      ],
+      "allowedAttributes": {
+        "span": ["class"],
+        "p": ["class"],
+        "blockquote": ["class"]
+      },
+      "allowedSchemes": ["http", "https"],
+      "allowedSchemesByTag": {},
+      "stripIgnoreTag": true,
+      "stripIgnoreTagBody": ["script", "style"],
+      "keepContent": true,
+      "forbidTags": [
+        "script", "object", "embed", "link", "style", "img", "video", "audio",
+        "iframe", "frame", "frameset", "applet", "base", "meta", "title"
+      ],
+      "forbidAttr": [
+        "onclick", "onload", "onerror", "onmouseover", "onmouseout", "onfocus",
+        "onblur", "onchange", "onsubmit", "onreset", "onselect", "onkeydown",
+        "onkeypress", "onkeyup", "style", "background", "src", "href"
+      ]
+    },
+    "socialSharing": {
+      "allowedTags": [],
+      "allowedAttributes": {},
+      "allowedSchemes": [],
+      "allowedSchemesByTag": {},
+      "stripIgnoreTag": true,
+      "stripIgnoreTagBody": ["script", "style"],
+      "keepContent": true,
+      "forbidTags": [
+        "script", "object", "embed", "link", "style", "img", "video", "audio",
+        "iframe", "frame", "frameset", "applet", "base", "meta", "title",
+        "b", "i", "em", "strong", "u", "s", "br", "p", "span", "div"
+      ],
+      "forbidAttr": [
+        "onclick", "onload", "onerror", "onmouseover", "onmouseout", "onfocus",
+        "onblur", "onchange", "onsubmit", "onreset", "onselect", "onkeydown",
+        "onkeypress", "onkeyup", "style", "background", "src", "href", "class", "id"
+      ]
+    },
+    "defaultPolicy": {
+      "allowedTags": [
+        "b", "i", "em", "strong", "u", "br"
+      ],
+      "allowedAttributes": {},
+      "allowedSchemes": [],
+      "allowedSchemesByTag": {},
+      "stripIgnoreTag": true,
+      "stripIgnoreTagBody": ["script", "style"],
+      "keepContent": true,
+      "forbidTags": [
+        "script", "object", "embed", "link", "style", "img", "video", "audio",
+        "iframe", "frame", "frameset", "applet", "base", "meta", "title"
+      ],
+      "forbidAttr": [
+        "onclick", "onload", "onerror", "onmouseover", "onmouseout", "onfocus",
+        "onblur", "onchange", "onsubmit", "onreset", "onselect", "onkeydown",
+        "onkeypress", "onkeyup", "style", "background", "src", "href", "class", "id"
+      ]
+    }
+  },
+  "riskThresholds": {
+    "low": 0.2,
+    "medium": 0.5,
+    "high": 0.8,
+    "critical": 0.95
+  },
+  "performanceThresholds": {
+    "maxProcessingTimeMs": 100,
+    "maxContentLength": 10000,
+    "maxConcurrentRequests": 50
+  },
+  "monitoring": {
+    "logSecurityViolations": true,
+    "alertOnCriticalViolations": true,
+    "trackPerformanceMetrics": true,
+    "auditTrailEnabled": true
+  }
+}

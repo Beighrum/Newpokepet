@@ -23,10 +23,12 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSanitizedUserProfile } from '@/hooks/useSanitizedUserProfile';
 import { SafeHTMLDisplay } from './sanitization/SafeHTMLDisplay';
+import AuthModal from './auth/AuthModal';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, signOut, signInWithGoogle } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { user, signOut, loading } = useAuth();
   const { sanitizedProfile, isLoading: profileLoading } = useSanitizedUserProfile(user);
   const navigate = useNavigate();
   const location = useLocation();
@@ -45,12 +47,8 @@ const Navbar = () => {
     }
   };
 
-  const handleSignIn = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      console.error('Error signing in:', error);
-    }
+  const handleSignIn = () => {
+    setShowAuthModal(true);
   };
 
   const navigationItems = [
@@ -177,7 +175,7 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button onClick={handleSignIn} variant="default" size="sm">
+              <Button onClick={handleSignIn} variant="default" size="sm" disabled={loading}>
                 Sign In
               </Button>
             )}
@@ -224,6 +222,13 @@ const Navbar = () => {
             </div>
           </div>
         )}
+
+        {/* Auth Modal */}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          defaultTab="signin"
+        />
       </div>
     </nav>
   );
