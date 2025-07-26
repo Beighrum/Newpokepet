@@ -44,7 +44,7 @@
   - _Story Points: 5pts_
   - _Persona: Casual User_
 
-- [ ] 5. Set up backend API foundation
+- [-] 5. Set up backend API foundation
   - Create Express server with TypeScript configuration
   - Set up Firebase Admin SDK for server-side auth
   - Implement middleware for authentication verification
