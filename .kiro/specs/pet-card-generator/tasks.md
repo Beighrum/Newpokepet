@@ -33,7 +33,7 @@
   - _Story Points: 13pts (8pts email + 5pts social auth)_
   - _Persona: New Visitor, Casual User_
 
-- [-] 4. Build photo upload and validation system
+- [x] 4. Build photo upload and validation system
   - Create file upload component with drag-and-drop support
   - Implement client-side image validation (format, size, dimensions)
   - Add image preview and cropping functionality
