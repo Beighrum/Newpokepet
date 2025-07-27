@@ -1,0 +1,164 @@
+groups:
+  - name: pet-card-generator-alerts
+    rules:
+      # Application availability
+      - alert: ApplicationDown
+        expr: up{job="pet-card-generator"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Pet Card Generator application is down"
+          description: "The Pet Card Generator application has been down for more than 1 minute."
+
+      # High error rate
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value }} errors per second for the last 5 minutes."
+
+      # High response time
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response time detected"
+          description: "95th percentile response time is {{ $value }} seconds."
+
+      # High memory usage
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is above 90% for more than 5 minutes."
+
+      # High CPU usage
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is above 80% for more than 10 minutes."
+
+      # Disk space low
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100 < 10
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Disk space is low"
+          description: "Disk space is below 10% on {{ $labels.instance }}."
+
+      # Card generation failures
+      - alert: CardGenerationFailures
+        expr: rate(card_generation_failures_total[5m]) > 0.05
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High card generation failure rate"
+          description: "Card generation failure rate is {{ $value }} failures per second."
+
+      # API rate limit exceeded
+      - alert: APIRateLimitExceeded
+        expr: rate(api_rate_limit_exceeded_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "API rate limit frequently exceeded"
+          description: "API rate limit is being exceeded {{ $value }} times per second."
+
+      # Database connection issues
+      - alert: DatabaseConnectionIssues
+        expr: database_connections_failed_total > 10
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Database connection issues"
+          description: "Database connection failures detected."
+
+      # File upload failures
+      - alert: FileUploadFailures
+        expr: rate(file_upload_failures_total[5m]) > 0.02
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High file upload failure rate"
+          description: "File upload failure rate is {{ $value }} failures per second."
+
+      # Queue size growing
+      - alert: QueueSizeGrowing
+        expr: increase(queue_size[10m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Queue size is growing rapidly"
+          description: "Queue size has increased by {{ $value }} items in the last 10 minutes."
+
+      # SSL certificate expiring
+      - alert: SSLCertificateExpiring
+        expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 7
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "SSL certificate expiring soon"
+          description: "SSL certificate for {{ $labels.instance }} expires in less than 7 days."
+
+      # External API failures
+      - alert: ExternalAPIFailures
+        expr: rate(external_api_failures_total[5m]) > 0.1
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High external API failure rate"
+          description: "External API failure rate is {{ $value }} failures per second for {{ $labels.api }}."
+
+  - name: business-metrics-alerts
+    rules:
+      # Low user activity
+      - alert: LowUserActivity
+        expr: rate(user_actions_total[1h]) < 10
+        for: 30m
+        labels:
+          severity: info
+        annotations:
+          summary: "Low user activity detected"
+          description: "User activity is below normal levels."
+
+      # High API costs
+      - alert: HighAPICosts
+        expr: increase(api_cost_total[1h]) > 100
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High API costs detected"
+          description: "API costs have increased by ${{ $value }} in the last hour."
+
+      # Premium conversion rate low
+      - alert: LowPremiumConversion
+        expr: rate(premium_conversions_total[24h]) / rate(user_registrations_total[24h]) < 0.05
+        for: 2h
+        labels:
+          severity: info
+        annotations:
+          summary: "Low premium conversion rate"
+          description: "Premium conversion rate is {{ $value | humanizePercentage }} over the last 24 hours."
