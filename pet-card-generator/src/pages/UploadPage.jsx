@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
+import { useAnalytics, useInteractionTracking, usePerformanceTracking } from '@/hooks/useAnalytics';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -29,6 +30,11 @@ import { securityEventLogger } from '@/services/securityEventLogger';
 import SecurityStatusIndicator from '@/components/SecurityStatusIndicator';
 
 const UploadPage = () => {
+  // Analytics hooks
+  const { trackCardGeneration } = useAnalytics();
+  const { trackFileUpload, trackFormSubmit } = useInteractionTracking();
+  const { trackAPICall } = usePerformanceTracking();
+  
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [petName, setPetName] = useState('');
@@ -66,6 +72,9 @@ const UploadPage = () => {
     // Validate file type
     if (!file.type.startsWith('image/')) {
       setError('Please select a valid image file (JPEG, PNG, etc.)');
+      
+      // Track failed file upload
+      trackFileUpload(file.type, file.size, false, 'Invalid file type');
       return;
     }
 
@@ -73,8 +82,14 @@ const UploadPage = () => {
     const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {
       setError('File size must be less than 10MB');
+      
+      // Track failed file upload
+      trackFileUpload(file.type, file.size, false, 'File too large');
       return;
     }
+
+    // Track successful file upload
+    trackFileUpload(file.type, file.size, true);
 
     setError(null);
     setSelectedFile(file);
@@ -142,6 +157,7 @@ const UploadPage = () => {
       return;
     }
 
+    const startTime = Date.now();
     setIsGenerating(true);
     setGenerationProgress(0);
     setError(null);
@@ -186,6 +202,7 @@ const UploadPage = () => {
       setGenerationProgress(40);
 
       // Call the generate API
+      const apiStartTime = Date.now();
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: {
@@ -195,17 +212,39 @@ const UploadPage = () => {
         body: JSON.stringify(requestData)
       });
 
+      const apiEndTime = Date.now();
+      const apiResponseTime = apiEndTime - apiStartTime;
+
       setGenerationProgress(70);
 
       if (!response.ok) {
         const errorData = await response.json();
+        
+        // Track API call failure
+        trackAPICall('/api/generate', 'POST', apiResponseTime, false, response.status);
+        
         throw new Error(errorData.message || 'Failed to generate card');
       }
 
       const result = await response.json();
       setGenerationProgress(100);
 
+      // Track API call success
+      trackAPICall('/api/generate', 'POST', apiResponseTime, true, response.status);
+
       if (result.success) {
+        const endTime = Date.now();
+        const totalGenerationTime = endTime - startTime;
+        
+        // Track successful card generation
+        trackCardGeneration({
+          cardId: result.card.id || 'unknown',
+          petType: sanitizedData.petType || 'unknown',
+          rarity: result.card.rarity || 'common',
+          generationTime: totalGenerationTime,
+          success: true
+        });
+        
         setGeneratedCard(result.card);
         // Clear form after successful generation
         clearFile();
@@ -220,6 +259,20 @@ const UploadPage = () => {
 
     } catch (error) {
       console.error('Error generating card:', error);
+      
+      const endTime = Date.now();
+      const totalGenerationTime = endTime - startTime;
+      
+      // Track failed card generation
+      trackCardGeneration({
+        cardId: 'failed',
+        petType: petType || 'unknown',
+        rarity: 'unknown',
+        generationTime: totalGenerationTime,
+        success: false,
+        errorMessage: error.message
+      });
+      
       setError(error.message || 'An unexpected error occurred while generating the card');
     } finally {
       setIsGenerating(false);
@@ -292,16 +345,34 @@ const UploadPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Generate Pet Trading Card
-          </h1>
-          <p className="text-lg text-gray-600">
-            Transform your pet photos into unique collectible trading cards
-          </p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Navigation Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <button 
+              onClick={() => navigate('/')}
+              className="text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors"
+            >
+              🐾 Pet Cards
+            </button>
+            <div className="text-sm text-gray-600">
+              Welcome, {user?.displayName || user?.email}
+            </div>
+          </div>
         </div>
+      </header>
+
+      <div className="py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Generate Pet Trading Card
+            </h1>
+            <p className="text-lg text-gray-600">
+              Transform your pet photos into unique collectible trading cards
+            </p>
+          </div>
 
         {!generatedCard ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
