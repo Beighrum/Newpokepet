@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import OnboardingTooltip from '@/components/OnboardingTooltip';
 import ScrollToTop from '@/components/ScrollToTop';
+import { LandingHero } from '@/components/landing-hero';
 
 // Sample pet card data for the carousel
 const sampleCards = [
@@ -211,95 +212,8 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-screen flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-200/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute top-3/4 left-1/2 w-48 h-48 bg-pink-200/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center">
-            {/* Animated sparkles */}
-            <div className={`relative inline-block mb-6 transition-all duration-1000 ${hasAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <Sparkles className="absolute -top-2 -left-2 w-6 h-6 text-yellow-400 sparkle-animation" />
-              <Sparkles className="absolute -bottom-2 -right-2 w-4 h-4 text-purple-400 sparkle-animation" style={{ animationDelay: '0.5s' }} />
-              <Sparkles className="absolute top-1/2 -right-8 w-3 h-3 text-pink-400 sparkle-animation" style={{ animationDelay: '1s' }} />
-              <Sparkles className="absolute top-1/4 -left-12 w-5 h-5 text-blue-400 sparkle-animation" style={{ animationDelay: '1.5s' }} />
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold animated-gradient-text px-4">
-                Pet Card Generator
-              </h1>
-            </div>
-
-            <p className={`text-lg sm:text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed px-4 transition-all duration-1000 delay-300 ${hasAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              Transform your beloved pets into stunning, collectible trading cards with AI-powered magic.
-              Create, collect, and share unique cards with friends!
-            </p>
-
-            {/* CTA Buttons */}
-            <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 px-4 transition-all duration-1000 delay-500 ${hasAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <Button
-                onClick={handleSignUp}
-                disabled={isLoading}
-                size="lg"
-                className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 pulse-glow disabled:opacity-50 disabled:cursor-not-allowed ripple-effect button-pulse"
-              >
-                {isLoading ? (
-                  <LoadingSpinner size="sm" text="" />
-                ) : (
-                  <>
-                    {user ? 'Create Your Card' : 'Get Started Free'}
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </>
-                )}
-              </Button>
-
-              <Button
-                onClick={handleDemo}
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto px-8 py-4 text-lg font-semibold rounded-full border-2 border-gray-300 hover:border-blue-500 hover:text-blue-600 transition-all duration-200 hover-lift ripple-effect"
-              >
-                <Play className="mr-2 w-5 h-5" />
-                Try Demo
-              </Button>
-
-              <Button
-                onClick={handleShowOnboarding}
-                variant="ghost"
-                size="sm"
-                className="text-gray-500 hover:text-blue-600 transition-colors"
-                title="How it works"
-              >
-                <HelpCircle className="w-4 h-4 mr-1" />
-                How it works
-              </Button>
-            </div>
-
-            {/* Feature highlights */}
-            <div className={`grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto px-4 transition-all duration-1000 delay-700 ${hasAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <div className="flex flex-col items-center p-3 sm:p-4 bg-white/60 rounded-lg backdrop-blur-sm hover-lift border border-white/20 shadow-sm cursor-pointer group">
-                <Zap className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-500 mb-2 float-animation group-hover:scale-110 transition-transform" />
-                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center group-hover:text-yellow-600 transition-colors">AI-Powered</span>
-              </div>
-              <div className="flex flex-col items-center p-3 sm:p-4 bg-white/60 rounded-lg backdrop-blur-sm hover-lift border border-white/20 shadow-sm cursor-pointer group">
-                <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-green-500 mb-2 float-animation group-hover:scale-110 transition-transform" style={{ animationDelay: '0.5s' }} />
-                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center group-hover:text-green-600 transition-colors">Secure</span>
-              </div>
-              <div className="flex flex-col items-center p-3 sm:p-4 bg-white/60 rounded-lg backdrop-blur-sm hover-lift border border-white/20 shadow-sm cursor-pointer group">
-                <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-red-500 mb-2 float-animation group-hover:scale-110 transition-transform" style={{ animationDelay: '1s' }} />
-                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center group-hover:text-red-600 transition-colors">Easy to Use</span>
-              </div>
-              <div className="flex flex-col items-center p-3 sm:p-4 bg-white/60 rounded-lg backdrop-blur-sm hover-lift border border-white/20 shadow-sm cursor-pointer group">
-                <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-purple-500 mb-2 float-animation group-hover:scale-110 transition-transform" style={{ animationDelay: '1.5s' }} />
-                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center group-hover:text-purple-600 transition-colors">Collectible</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Enhanced Hero Section */}
+      <LandingHero />
 
       {/* Feature Highlight Carousel */}
       <section className="py-20 bg-white">

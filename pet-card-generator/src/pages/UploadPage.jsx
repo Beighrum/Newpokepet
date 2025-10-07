@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +9,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import {
   Upload,
   Image as ImageIcon,
@@ -17,7 +21,20 @@ import {
   Download,
   Share2,
   Sparkles,
-  Shield
+  Shield,
+  Gem,
+  Crown,
+  Zap,
+  Droplets,
+  Flame,
+  Mountain,
+  Leaf,
+  Snowflake,
+  Ghost,
+  Sword,
+  Waves,
+  Eye,
+  Info
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';

@@ -61,7 +61,7 @@ const EvolutionPage = () => {
       setIsLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/cards?userId=${user.uid}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/pet-to-pokemon/us-central1/getUserCards?userId=${user.uid}`, {
         headers: {
           'Authorization': `Bearer ${await user.getIdToken()}`
         }
@@ -183,7 +183,7 @@ const EvolutionPage = () => {
     try {
       setEvolutionProgress(20);
 
-      const response = await fetch('/api/evolve', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/pet-to-pokemon/us-central1/evolveCard`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -191,7 +191,7 @@ const EvolutionPage = () => {
         },
         body: JSON.stringify({
           cardId: card.id,
-          userId: user.uid
+          targetStage: (card.evolution?.stage || 1) + 1
         })
       });
 

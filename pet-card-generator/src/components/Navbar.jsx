@@ -17,7 +17,10 @@ import {
   Upload, 
   Sparkles,
   Menu,
-  X
+  X,
+  Sword,
+  Trophy,
+  Image
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -61,18 +64,38 @@ const Navbar = () => {
       active: location.pathname === '/'
     },
     {
-      label: 'Generate',
+      label: 'Upload',
       path: '/upload',
       icon: Upload,
       active: location.pathname === '/upload',
       requiresAuth: true
     },
     {
-      label: 'Evolve',
+      label: 'Gallery',
+      path: '/gallery',
+      icon: Image,
+      active: location.pathname === '/gallery',
+      requiresAuth: true
+    },
+    {
+      label: 'Evolution',
       path: '/evolution',
       icon: Sparkles,
       active: location.pathname === '/evolution',
       requiresAuth: true
+    },
+    {
+      label: 'Battle',
+      path: '/battle',
+      icon: Sword,
+      active: location.pathname === '/battle',
+      requiresAuth: true
+    },
+    {
+      label: 'Showcase',
+      path: '/showcase',
+      icon: Trophy,
+      active: location.pathname === '/showcase'
     }
   ];
 
